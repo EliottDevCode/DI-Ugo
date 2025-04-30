@@ -9,7 +9,10 @@ RUN apk add --no-cache \
     libzip \
     unzip \
     zlib \
-    nginx
+    nginx \
+    sqlite \
+    sqlite-tools \
+    libpq
 
 # PHP Extensions
 RUN apk add --no-cache --virtual .build-deps \
@@ -18,12 +21,14 @@ RUN apk add --no-cache --virtual .build-deps \
     libzip-dev \
     zlib-dev \
     sqlite-dev \
+    postgresql-dev \
     && docker-php-ext-install -j$(nproc) \
     intl \
     zip \
     pdo \
     pdo_mysql \
     pdo_sqlite \
+    pdo_pgsql \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && apk del .build-deps
