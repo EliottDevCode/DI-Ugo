@@ -1,0 +1,35 @@
+services:
+  backend:
+    build: ./backend
+    container_name: symfony-backend
+    volumes:
+      - ./backend:/var/www/symfony
+      - ./backend/var:/var/www/symfony/var
+      # SQLite database persistence
+      - ./backend/var/data.db:/var/www/symfony/var/data.db
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=prod
+      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
