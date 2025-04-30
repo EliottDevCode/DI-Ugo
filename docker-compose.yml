@@ -6,13 +6,29 @@ services:
       - ./backend:/var/www/symfony
       - ./backend/var:/var/www/symfony/var
       # SQLite database persistence
-      - ./backend/var/data.db:/var/www/symfony/var/data.db
+      # - ./backend/var/data.db:/var/www/symfony/var/data.db
     ports:
       - "8000:8000"
     environment:
       - APP_ENV=prod
-      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db
+      - DATABASE_URL=postgresql://symfony:symfony@db:5432/symfony?serverVersion=15&charset=utf8
     restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: symfony
+      POSTGRES_USER: symfony
+      POSTGRES_PASSWORD: symfony
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - app-network
 
@@ -33,3 +49,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  db-data:
