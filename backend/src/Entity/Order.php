@@ -46,11 +46,11 @@ class Order
     #[Groups(['order:read', 'order:write'])]
     private ?float $price = null;
 
-    #[ORM\Column(length: 3, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     #[Groups(['order:read', 'order:write'])]
     private ?string $currency = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     #[Groups(['order:read', 'order:write'])]
     private ?\DateTimeImmutable $date = null;
 

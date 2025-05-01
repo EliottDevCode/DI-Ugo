@@ -34,7 +34,7 @@ class Customer
     #[Groups(['customer:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 3, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     #[Groups(['customer:read', 'customer:write'])]
     private ?string $title = null;
 
