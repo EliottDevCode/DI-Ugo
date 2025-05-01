@@ -6,6 +6,8 @@ use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 class Customer
@@ -13,30 +15,38 @@ class Customer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['customer:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(length: 3, nullable: true)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $firstname = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $postal_code = null;
+    #[Groups(['customer:read', 'customer:write'])]
+    private ?int $postalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $email = null;
 
     /**
      * @var Collection<int, Order>
      */
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'customer')]
+    #[Groups(['customer:read'])]
     private Collection $orders;
 
     public function __construct()
@@ -87,12 +97,12 @@ class Customer
 
     public function getPostalCode(): ?int
     {
-        return $this->postal_code;
+        return $this->postalCode;
     }
 
-    public function setPostalCode(?int $postal_code): static
+    public function setPostalCode(?int $postalCode): static
     {
-        $this->postal_code = $postal_code;
+        $this->postalCode = $postalCode;
 
         return $this;
     }
@@ -142,7 +152,6 @@ class Customer
     public function removeOrder(Order $order): static
     {
         if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
             if ($order->getCustomer() === $this) {
                 $order->setCustomer(null);
             }

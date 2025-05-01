@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -12,25 +15,32 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['order:read', 'order:write'])]
     private ?string $product = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['order:read', 'order:write'])]
     private ?int $quantity = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['order:read', 'order:write'])]
     private ?float $price = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(length: 3, nullable: true)]
+    #[Groups(['order:read', 'order:write'])]
     private ?string $currency = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['order:read', 'order:write'])]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['order:read', 'order:write'])]
     private ?Customer $customer = null;
 
     public function getId(): ?int
