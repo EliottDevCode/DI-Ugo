@@ -10,8 +10,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - APP_ENV=prod
-      - DATABASE_URL=postgresql://symfony:symfony@db:5432/symfony?serverVersion=15&charset=utf8
+      - APP_ENV=dev
     restart: unless-stopped
     depends_on:
       - db
