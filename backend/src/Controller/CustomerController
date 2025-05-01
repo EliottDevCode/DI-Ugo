@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Customer;
+use App\Repository\CustomerRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+#[Route('/api/customers')]
+class CustomerController extends AbstractController
+{
+    public function __construct(
+        private CustomerRepository $customerRepository,
+        private EntityManagerInterface $entityManager,
+        private SerializerInterface $serializer,
+        private ValidatorInterface $validator
+    ) {
+    }
+
+    #[Route('', name: 'customer_list', methods: ['GET'])]
+    public function list(): JsonResponse
+    {
+        $customers = $this->customerRepository->findAll();
+        return $this->json($customers, Response::HTTP_OK, [], ['groups' => ['customer:read']]);
+    }
+
+    #[Route('/{id}', name: 'customer_show', methods: ['GET'])]
+    public function show(Customer $customer): JsonResponse
+    {
+        return $this->json($customer, Response::HTTP_OK, [], ['groups' => ['customer:read']]);
+    }
+
+    #[Route('', name: 'customer_create', methods: ['POST'])]
+    public function create(Request $request): JsonResponse
+    {
+        $customer = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
+        
+        $errors = $this->validator->validate($customer);
+        if (count($errors) > 0) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->entityManager->persist($customer);
+        $this->entityManager->flush();
+
+        return $this->json($customer, Response::HTTP_CREATED, [], ['groups' => ['customer:read']]);
+    }
+
+    #[Route('/{id}', name: 'customer_update', methods: ['PUT'])]
+    public function update(Request $request, Customer $customer): JsonResponse
+    {
+        $this->serializer->deserialize(
+            $request->getContent(),
+            Customer::class,
+            'json',
+            ['object_to_populate' => $customer]
+        );
+
+        $errors = $this->validator->validate($customer);
+        if (count($errors) > 0) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->entityManager->flush();
+
+        return $this->json($customer, Response::HTTP_OK, [], ['groups' => ['customer:read']]);
+    }
+
+    #[Route('/{id}', name: 'customer_delete', methods: ['DELETE'])]
+    public function delete(Customer $customer): JsonResponse
+    {
+        $this->entityManager->remove($customer);
+        $this->entityManager->flush();
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+}
