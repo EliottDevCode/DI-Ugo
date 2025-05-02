@@ -84,12 +84,12 @@ const OrderList = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
+              <TableCell>Client</TableCell>
               <TableCell>Produit</TableCell>
               <TableCell>Quantité</TableCell>
               <TableCell>Prix</TableCell>
               <TableCell>Devise</TableCell>
               <TableCell>Date</TableCell>
-              <TableCell>Client</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -97,14 +97,12 @@ const OrderList = () => {
             {orders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell>{order.id}</TableCell>
+                <TableCell>{order.customer.lastname}</TableCell>
                 <TableCell>{order.product}</TableCell>
                 <TableCell>{order.quantity}</TableCell>
                 <TableCell>{order.price}</TableCell>
                 <TableCell>{order.currency}</TableCell>
                 <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
-                <TableCell>
-                  {order.customer.firstname} {order.customer.lastname}
-                </TableCell>
                 <TableCell>
                   <Button
                     color="primary"
@@ -125,6 +123,16 @@ const OrderList = () => {
               </TableRow>
             ))}
           </TableBody>
+          <tfoot>
+            <TableRow>
+              <TableCell colSpan={4} />
+              <TableCell><b>Total :</b></TableCell>
+              <TableCell>
+                <b>{orders.reduce((acc, order) => acc + (order.price || 0), 0).toFixed(2)}</b>
+              </TableCell>
+              <TableCell colSpan={2} />
+            </TableRow>
+          </tfoot>
         </Table>
       </TableContainer>
 

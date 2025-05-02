@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import { customerApi, Customer } from '../services/api'
 import CustomerForm from '../components/CustomerForm'
+import { Link as RouterLink } from 'react-router-dom'
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState<Customer[]>([])
@@ -122,6 +123,13 @@ const CustomerList = () => {
                     onClick={() => handleDelete(customer.id)}
                   >
                     Supprimer
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to="/orders"
+                    color="secondary"
+                  >
+                    Show Orders
                   </Button>
                 </TableCell>
               </TableRow>

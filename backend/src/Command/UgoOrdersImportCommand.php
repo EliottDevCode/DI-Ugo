@@ -51,7 +51,13 @@ class UgoOrdersImportCommand extends Command
         $customers = [];
         while (($data = fgetcsv($handle, 0, ';')) !== false) {
             $customer = new Customer();
-            $customer->setTitle($data[1]);
+            // Mapping for civility
+            $title = match ($data[1]) {
+                '1' => 'Mme',
+                '2' => 'M',
+                default => null,
+            };
+            $customer->setTitle($title);
             $customer->setLastname($data[2]);
             $customer->setFirstname($data[3]);
             $customer->setPostalCode($data[4] ? (int)$data[4] : null);
