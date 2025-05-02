@@ -44,7 +44,7 @@ const OrderForm = ({ open, onClose, onSubmit, initialData }: OrderFormProps) => 
 
   useEffect(() => {
     if (initialData) {
-      const { id, ...rest } = initialData
+      const { id: _id, ...rest } = initialData
       setFormData(rest)
     } else {
       setFormData({

@@ -30,7 +30,7 @@ const CustomerForm = ({ open, onClose, onSubmit, initialData }: CustomerFormProp
 
   useEffect(() => {
     if (initialData) {
-      const { id, ...rest } = initialData
+      const { id: _id, ...rest } = initialData
       setFormData(rest)
     } else {
     setFormData({

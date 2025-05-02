@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
     {
         return $this->json([
             'message' => 'Bienvenue',
-            'status' => 'ok'
+            'status' => 'ok',
         ]);
     }
-} 
+}

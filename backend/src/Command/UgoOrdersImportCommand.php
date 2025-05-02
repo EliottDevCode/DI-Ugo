@@ -22,8 +22,7 @@ class UgoOrdersImportCommand extends Command
         private EntityManagerInterface $entityManager,
         private ParameterBagInterface $parameterBag,
         ?string $name = null,
-    )
-    {
+    ) {
         parent::__construct($name);
     }
 
@@ -31,17 +30,19 @@ class UgoOrdersImportCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $projectDir = $this->parameterBag->get('kernel.project_dir');
-        
+
         // Import customers
-        $customersFile = $projectDir . '/csv/customers.csv';
+        $customersFile = $projectDir.'/csv/customers.csv';
         if (!file_exists($customersFile)) {
             $io->error('Le fichier customers.csv n\'existe pas');
+
             return Command::FAILURE;
         }
 
         $handle = fopen($customersFile, 'r');
         if (!$handle) {
             $io->error('Impossible d\'ouvrir le fichier customers.csv');
+
             return Command::FAILURE;
         }
 
@@ -60,7 +61,7 @@ class UgoOrdersImportCommand extends Command
             $customer->setTitle($title);
             $customer->setLastname($data[2]);
             $customer->setFirstname($data[3]);
-            $customer->setPostalCode($data[4] ? (int)$data[4] : null);
+            $customer->setPostalCode($data[4] ? (int) $data[4] : null);
             $customer->setCity($data[5]);
             $customer->setEmail($data[6]);
 
@@ -70,15 +71,17 @@ class UgoOrdersImportCommand extends Command
         fclose($handle);
 
         // Import orders
-        $ordersFile = $projectDir . '/csv/purchases.csv';
+        $ordersFile = $projectDir.'/csv/purchases.csv';
         if (!file_exists($ordersFile)) {
             $io->error('Le fichier purchases.csv n\'existe pas');
+
             return Command::FAILURE;
         }
 
         $handle = fopen($ordersFile, 'r');
         if (!$handle) {
             $io->error('Impossible d\'ouvrir le fichier purchases.csv');
+
             return Command::FAILURE;
         }
 
@@ -93,8 +96,8 @@ class UgoOrdersImportCommand extends Command
 
             $order = new Order();
             $order->setProduct($data[2]);
-            $order->setQuantity((int)$data[3]);
-            $order->setPrice((float)$data[4]);
+            $order->setQuantity((int) $data[3]);
+            $order->setPrice((float) $data[4]);
             $order->setCurrency($data[5]);
             $order->setDate(new \DateTimeImmutable($data[6]));
             $order->setCustomer($customers[$data[1]]);

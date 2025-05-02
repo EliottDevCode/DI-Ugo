@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,6 +32,7 @@ class Customer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['customer:read'])]
+    /** @phpstan-ignore-next-line */
     private ?int $id = null;
 
     #[ORM\Column(length: 10, nullable: true)]
@@ -39,11 +40,11 @@ class Customer
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:write','order:read'])]
+    #[Groups(['customer:read', 'customer:write', 'order:read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:write','order:read'])]
+    #[Groups(['customer:read', 'customer:write', 'order:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(nullable: true)]

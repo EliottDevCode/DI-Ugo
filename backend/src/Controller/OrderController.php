@@ -20,7 +20,7 @@ class OrderController extends AbstractController
         private OrderRepository $orderRepository,
         private EntityManagerInterface $entityManager,
         private SerializerInterface $serializer,
-        private ValidatorInterface $validator
+        private ValidatorInterface $validator,
     ) {
     }
 
@@ -28,6 +28,7 @@ class OrderController extends AbstractController
     public function list(): JsonResponse
     {
         $orders = $this->orderRepository->findAll();
+
         return $this->json($orders, Response::HTTP_OK, [], ['groups' => ['order:read']]);
     }
 
@@ -41,7 +42,7 @@ class OrderController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $order = $this->serializer->deserialize($request->getContent(), Order::class, 'json');
-        
+
         $errors = $this->validator->validate($order);
         if (count($errors) > 0) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
