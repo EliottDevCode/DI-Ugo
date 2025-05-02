@@ -39,11 +39,11 @@ class Customer
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:write'])]
+    #[Groups(['customer:read', 'customer:write','order:read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:write'])]
+    #[Groups(['customer:read', 'customer:write','order:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(nullable: true)]
