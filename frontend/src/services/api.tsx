@@ -28,7 +28,7 @@ export interface Order {
 }
 
 export const customerApi = {
-  getAll: () => api.get<Customer[]>('/customers'),
+  getAll: () => api.get<{ member: Customer[] }>('/customers'),
   getById: (id: number) => api.get<Customer>(`/customers/${id}`),
   create: (data: Omit<Customer, 'id'>) => api.post<Customer>('/customers', data),
   update: (id: number, data: Partial<Customer>) => api.put<Customer>(`/customers/${id}`, data),

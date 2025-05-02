@@ -22,11 +22,7 @@ const CustomerList = () => {
   const loadCustomers = async () => {
     try {
       const response = await customerApi.getAll()
-      
-      const customerData = ((response.data as unknown) as { member: Customer[] }).member || []
-      console.log('Parsed customers:', customerData)
-      
-      setCustomers(customerData)
+      setCustomers(response.data.member)
     } catch (error) {
       console.error('Erreur lors du chargement des clients:', error)
     }
@@ -66,6 +62,10 @@ const CustomerList = () => {
       console.error('Erreur lors de la suppression du client:', error)
     }
   }
+
+  useEffect(() => {
+    loadCustomers()
+  }, [])
 
   return (
     <Box>
