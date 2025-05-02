@@ -34,8 +34,8 @@ const OrderForm = ({ open, onClose, onSubmit, initialData }: OrderFormProps) => 
     const loadCustomers = async () => {
       try {
         const response = await customerApi.getAll()
-        setCustomers(((response.data as unknown) as { 'hydra:member': Customer[] })['hydra:member'] || [])
-      } catch (error) {
+        setCustomers(((response.data as unknown) as { member: Customer[] }).member || [])
+          } catch (error) {
         console.error('Erreur lors du chargement des clients:', error)
       }
     }

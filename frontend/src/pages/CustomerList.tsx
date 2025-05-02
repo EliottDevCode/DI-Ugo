@@ -22,21 +22,24 @@ const CustomerList = () => {
   const loadCustomers = async () => {
     try {
       const response = await customerApi.getAll()
-      setCustomers(((response.data as unknown) as { 'hydra:member': Customer[] })['hydra:member'] || [])
+      
+      const customerData = ((response.data as unknown) as { member: Customer[] }).member || []
+      console.log('Parsed customers:', customerData)
+      
+      setCustomers(customerData)
     } catch (error) {
       console.error('Erreur lors du chargement des clients:', error)
     }
   }
 
-  useEffect(() => {
-    loadCustomers()
-  }, [])
 
   const handleCreate = async (data: Omit<Customer, 'id'>) => {
     try {
       await customerApi.create(data)
-      loadCustomers()
       setOpenForm(false)
+      setTimeout(() => {
+        loadCustomers()
+      }, 500)
     } catch (error) {
       console.error('Erreur lors de la création du client:', error)
     }
@@ -45,9 +48,11 @@ const CustomerList = () => {
   const handleUpdate = async (id: number, data: Partial<Customer>) => {
     try {
       await customerApi.update(id, data)
-      loadCustomers()
       setOpenForm(false)
       setSelectedCustomer(null)
+      setTimeout(() => {
+        loadCustomers()
+      }, 500)
     } catch (error) {
       console.error('Erreur lors de la mise à jour du client:', error)
     }
