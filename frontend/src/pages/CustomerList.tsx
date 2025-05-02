@@ -22,7 +22,7 @@ const CustomerList = () => {
   const loadCustomers = async () => {
     try {
       const response = await customerApi.getAll()
-      setCustomers(response.data)
+      setCustomers(((response.data as unknown) as { 'hydra:member': Customer[] })['hydra:member'] || [])
     } catch (error) {
       console.error('Erreur lors du chargement des clients:', error)
     }
