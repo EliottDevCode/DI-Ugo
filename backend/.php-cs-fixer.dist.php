@@ -1,10 +1,13 @@
 <?php
 
+$paths = [__DIR__.'/src'];
+
+if (is_dir(__DIR__.'/tests')) {
+    $paths[] = __DIR__.'/tests';
+}
+
 $finder = (new PhpCsFixer\Finder())
-    ->in([
-        __DIR__.'/src',
-        __DIR__.'/tests',
-    ])
+    ->in($paths)
     ->exclude('var')
 ;
 
