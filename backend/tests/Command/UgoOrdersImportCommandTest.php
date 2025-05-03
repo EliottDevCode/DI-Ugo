@@ -26,12 +26,12 @@ class UgoOrdersImportCommandTest extends TestCase
             $this->entityManager,
             $this->parameterBag
         );
-        
+
         // Create a temporary directory for test files
-        $this->projectDir = sys_get_temp_dir() . '/ugo_test_' . uniqid();
+        $this->projectDir = sys_get_temp_dir().'/ugo_test_'.uniqid();
         mkdir($this->projectDir);
-        mkdir($this->projectDir . '/csv');
-        
+        mkdir($this->projectDir.'/csv');
+
         // Simulate the parameterBag to return our test directory
         $this->parameterBag->method('get')
             ->with('kernel.project_dir')
@@ -41,14 +41,14 @@ class UgoOrdersImportCommandTest extends TestCase
     protected function tearDown(): void
     {
         // Cleaning up test files
-        if (file_exists($this->projectDir . '/csv/customers.csv')) {
-            unlink($this->projectDir . '/csv/customers.csv');
+        if (file_exists($this->projectDir.'/csv/customers.csv')) {
+            unlink($this->projectDir.'/csv/customers.csv');
         }
-        if (file_exists($this->projectDir . '/csv/purchases.csv')) {
-            unlink($this->projectDir . '/csv/purchases.csv');
+        if (file_exists($this->projectDir.'/csv/purchases.csv')) {
+            unlink($this->projectDir.'/csv/purchases.csv');
         }
-        if (is_dir($this->projectDir . '/csv')) {
-            rmdir($this->projectDir . '/csv');
+        if (is_dir($this->projectDir.'/csv')) {
+            rmdir($this->projectDir.'/csv');
         }
         if (is_dir($this->projectDir)) {
             rmdir($this->projectDir);
@@ -58,35 +58,35 @@ class UgoOrdersImportCommandTest extends TestCase
     /**
      * Test if the import is successful
      */
-    public function testSuccess(): void
+    public function test_success(): void
     {
         // Create the files needed for the test
         file_put_contents(
-            $this->projectDir . '/csv/customers.csv',
-            "id;civility;lastname;firstname;postalcode;city;email\n" .
-            "1;1;Dupont;Marie;75001;Paris;marie.dupont@example.com\n" .
-            "2;2;Martin;Jean;69001;Lyon;jean.martin@example.com"
+            $this->projectDir.'/csv/customers.csv',
+            "id;civility;lastname;firstname;postalcode;city;email\n".
+            "1;1;Dupont;Marie;75001;Paris;marie.dupont@example.com\n".
+            '2;2;Martin;Jean;69001;Lyon;jean.martin@example.com'
         );
-        
+
         file_put_contents(
-            $this->projectDir . '/csv/purchases.csv',
-            "id;customer_id;product;quantity;price;currency;date\n" .
-            "1;1;Produit A;2;19.99;EUR;2023-01-15\n" .
-            "2;2;Produit B;1;29.99;EUR;2023-01-20\n" .
-            "3;3;Produit C;3;9.99;EUR;2023-01-25"  
+            $this->projectDir.'/csv/purchases.csv',
+            "id;customer_id;product;quantity;price;currency;date\n".
+            "1;1;Produit A;2;19.99;EUR;2023-01-15\n".
+            "2;2;Produit B;1;29.99;EUR;2023-01-20\n".
+            '3;3;Produit C;3;9.99;EUR;2023-01-25'
         );
-        
+
         // Check that the EntityManager->persist() is called the right number of times
-        $this->entityManager->expects($this->exactly(4))  
+        $this->entityManager->expects($this->exactly(4))
             ->method('persist');
-        
+
         // Check that the EntityManager->flush() is called once
         $this->entityManager->expects($this->once())
             ->method('flush');
-        
+
         $commandTester = new CommandTester($this->command);
         $result = $commandTester->execute([]);
-        
+
         $this->assertEquals(0, $result);
         $this->assertStringContainsString('Import terminé avec succès', $commandTester->getDisplay());
         $this->assertStringContainsString('Client non trouvé pour la commande 3', $commandTester->getDisplay());
@@ -95,25 +95,25 @@ class UgoOrdersImportCommandTest extends TestCase
     /**
      * Test the mapping between the CSV and the entities
      */
-    public function testMapping(): void
+    public function test_mapping(): void
     {
         // Create the files needed for the test
         file_put_contents(
-            $this->projectDir . '/csv/customers.csv',
-            "id;civility;lastname;firstname;postalcode;city;email\n" .
-            "1;1;Dupont;Marie;75001;Paris;marie.dupont@example.com"
+            $this->projectDir.'/csv/customers.csv',
+            "id;civility;lastname;firstname;postalcode;city;email\n".
+            '1;1;Dupont;Marie;75001;Paris;marie.dupont@example.com'
         );
-        
+
         file_put_contents(
-            $this->projectDir . '/csv/purchases.csv',
-            "id;customer_id;product;quantity;price;currency;date\n" .
-            "1;1;Produit A;2;19.99;EUR;2023-01-15"
+            $this->projectDir.'/csv/purchases.csv',
+            "id;customer_id;product;quantity;price;currency;date\n".
+            '1;1;Produit A;2;19.99;EUR;2023-01-15'
         );
-        
-        //  Creating entities 
+
+        //  Creating entities
         $customer = new Customer();
         $order = new Order();
-        
+
         //  Use a predictable persistence implementation
         $this->entityManager->method('persist')
             ->willReturnCallback(function ($entity) use (&$customer, &$order) {
@@ -135,10 +135,10 @@ class UgoOrdersImportCommandTest extends TestCase
                     $order->setCustomer($entity->getCustomer());
                 }
             });
-        
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
-        
+
         // Check that the Customer is created
         $this->assertEquals('Mme', $customer->getTitle());
         $this->assertEquals('Dupont', $customer->getLastname());
@@ -146,21 +146,21 @@ class UgoOrdersImportCommandTest extends TestCase
         $this->assertEquals(75001, $customer->getPostalCode());
         $this->assertEquals('Paris', $customer->getCity());
         $this->assertEquals('marie.dupont@example.com', $customer->getEmail());
-        
-        // Check that the Order has been created 
+
+        // Check that the Order has been created
         $this->assertEquals('Produit A', $order->getProduct());
         $this->assertEquals(2, $order->getQuantity());
         $this->assertEquals(19.99, $order->getPrice());
         $this->assertEquals('EUR', $order->getCurrency());
-        
+
         $date = $order->getDate();
         $this->assertNotNull($date);
         $this->assertEquals('2023-01-15', $date->format('Y-m-d'));
-        
+
         $orderCustomer = $order->getCustomer();
         $this->assertNotNull($orderCustomer);
         // Check that the customer has the same properties
         $this->assertEquals($customer->getLastname(), $orderCustomer->getLastname());
         $this->assertEquals($customer->getFirstname(), $orderCustomer->getFirstname());
     }
-} 
+}
