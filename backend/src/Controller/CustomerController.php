@@ -20,7 +20,7 @@ class CustomerController extends AbstractController
         private CustomerRepository $customerRepository,
         private EntityManagerInterface $entityManager,
         private SerializerInterface $serializer,
-        private ValidatorInterface $validator
+        private ValidatorInterface $validator,
     ) {
     }
 
@@ -31,6 +31,7 @@ class CustomerController extends AbstractController
         $response = $this->json($customers, Response::HTTP_OK, [], ['groups' => ['customer:read']]);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Accept', 'application/json');
+
         return $response;
     }
 
@@ -40,6 +41,7 @@ class CustomerController extends AbstractController
         $response = $this->json($customer, Response::HTTP_OK, [], ['groups' => ['customer:read']]);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Accept', 'application/json');
+
         return $response;
     }
 
@@ -48,7 +50,7 @@ class CustomerController extends AbstractController
     {
         $content = $request->getContent();
         $customer = $this->serializer->deserialize($content, Customer::class, 'json');
-        
+
         $errors = $this->validator->validate($customer);
         if (count($errors) > 0) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
@@ -60,6 +62,7 @@ class CustomerController extends AbstractController
         $response = $this->json($customer, Response::HTTP_CREATED, [], ['groups' => ['customer:read']]);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Accept', 'application/json');
+
         return $response;
     }
 
@@ -83,6 +86,7 @@ class CustomerController extends AbstractController
         $response = $this->json($customer, Response::HTTP_OK, [], ['groups' => ['customer:read']]);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Accept', 'application/json');
+
         return $response;
     }
 
@@ -95,6 +99,7 @@ class CustomerController extends AbstractController
         $response = $this->json(null, Response::HTTP_NO_CONTENT);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Accept', 'application/json');
+
         return $response;
     }
 }
