@@ -1,11 +1,25 @@
 import axios from 'axios'
 
+// Configuration de l'instance Axios
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
+  withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
-  },
+    'Accept': 'application/json'
+  }
 })
+
+// Intercepteur pour ajouter des headers à chaque requête
+api.interceptors.request.use(
+  config => {
+    config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 
 export interface Customer {
   id: number
@@ -28,7 +42,7 @@ export interface Order {
 }
 
 export const customerApi = {
-  getAll: () => api.get<{ member: Customer[] }>('/customers'),
+  getAll: () => api.get<Customer[]>('/customers'),
   getById: (id: number) => api.get<Customer>(`/customers/${id}`),
   create: (data: Omit<Customer, 'id'>) => api.post<Customer>('/customers', data),
   update: (id: number, data: Partial<Customer>) => api.put<Customer>(`/customers/${id}`, data),

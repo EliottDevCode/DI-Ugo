@@ -23,7 +23,7 @@ const CustomerList = () => {
   const loadCustomers = async () => {
     try {
       const response = await customerApi.getAll()
-      setCustomers(response.data.member)
+      setCustomers(response.data)
     } catch (error) {
       console.error('Erreur lors du chargement des clients:', error)
     }

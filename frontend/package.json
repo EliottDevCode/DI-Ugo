@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint --config eslint.config.mjs .",
+    "lint": "eslint --config eslint.config.mjs 'src/**/*.{js,jsx,ts,tsx}' 'cypress/**/*.ts'",
     "preview": "vite preview",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",

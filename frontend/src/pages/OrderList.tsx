@@ -22,8 +22,7 @@ const OrderList = () => {
   const loadOrders = async () => {
     try {
       const response = await orderApi.getAll()
-      const orderData = ((response.data as unknown) as { member: Order[] }).member || []
-      setOrders(orderData)
+      setOrders(response.data)
     } catch (error) {
       console.error('Erreur lors du chargement des commandes:', error)
     }

@@ -10,6 +10,15 @@ export default [
   ...tseslint.configs.recommended,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      'public/**',
+      'cypress/screenshots/**',
+      'cypress/videos/**'
+    ],
     plugins: {
       'react': reactPlugin,
       'react-hooks': reactHooksPlugin,
