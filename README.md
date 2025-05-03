@@ -49,7 +49,7 @@ Un message de succès s'affichera si l'import s'est bien déroulé.
 ### 5. Accéder à l'application
 
 - **Frontend** : [http://localhost](http://localhost)
-- **Backend (API)** : [http://localhost:8000](http://localhost:8000)
+- **Backend (API)** : [http://localhost:8000/api](http://localhost:8000/api)
 
 ### 6. Arrêter les services
 
@@ -60,6 +60,36 @@ docker-compose down
 ```
 
 ---
+
+## Exécuter les tests
+
+### Tests du backend (Symfony)
+
+Pour exécuter les tests unitaires et fonctionnels du backend :
+
+```bash
+php bin/phpunit
+```
+
+### Tests du frontend (React)
+
+### Tests end-to-end avec Cypress
+
+Pour exécuter spécifiquement les tests de composants :
+
+```bash
+npx cypress run --component
+```
+
+---
+
+### Améliorations du projet
+- Améliorer l'UX du frontend
+- Configuration d'un cache (Redis) pour améliorer les performances
+- Pagination et chargement optimisé des données dans les tableaux pour de meilleures performances
+- Fonctionnalité de facturation basée sur les commandes
+- Système de notification par email pour les nouvelles commandes
+- Ajouter un système de gestion des utilisateurs et de contrôle d'accès
 
 ### Remarques importantes
 
