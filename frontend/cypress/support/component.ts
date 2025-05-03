@@ -1,14 +1,15 @@
 /// <reference types="cypress" />
 
+import { mount } from 'cypress/react'
 import './commands'
-
 import '../../src/index.css'
-
 
 declare global {
   namespace Cypress {
     interface Chainable {
-      mount: (component: React.ReactNode, options?: object) => Chainable<any>
+      mount: typeof mount
     }
   }
-} 
+}
+
+export {} 

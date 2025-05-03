@@ -41,4 +41,11 @@ export default [
       }],
     },
   },
+  // Configuration spécifique pour les fichiers cypress
+  {
+    files: ['**/cypress/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-namespace': 'off'
+    }
+  }
 ]; 
