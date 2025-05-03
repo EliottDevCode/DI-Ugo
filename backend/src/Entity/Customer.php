@@ -62,7 +62,7 @@ class Customer
     /**
      * @var Collection<int, Order>
      */
-    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'customer')]
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'customer', orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[Groups(['customer:read'])]
     private Collection $orders;
 

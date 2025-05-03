@@ -40,7 +40,13 @@ Ouvrez un nouveau terminal et exécutez la commande suivante pour accéder au co
 docker exec -it symfony-backend bash
 ```
 
-Puis, à l'intérieur du conteneur, lancez les migrations Doctrine pour créer les tables :
+Puis, à l'intérieur du conteneur:
+
+```bash
+composer install
+```
+
+Ensuite, lancez les migrations Doctrine pour créer les tables :
 
 ```bash
 php bin/console doctrine:migrations:migrate

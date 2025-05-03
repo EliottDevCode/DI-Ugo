@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-// Configuration de l'instance Axios
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
   withCredentials: false,
@@ -10,7 +9,7 @@ const api = axios.create({
   }
 })
 
-// Intercepteur pour ajouter des headers à chaque requête
+
 api.interceptors.request.use(
   config => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
