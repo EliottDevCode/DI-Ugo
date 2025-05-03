@@ -11,7 +11,17 @@ git clone <url-du-repo>
 cd DI-Ugo
 ```
 
-### 2. Lancer les services avec Docker Compose
+### 2. Configuration de la base de données
+
+Créez un fichier `.env.local` dans le répertoire `backend/` avec le contenu suivant :
+
+```
+DATABASE_URL="postgresql://symfony:symfony@db:5432/symfony?serverVersion=15&charset=utf8"
+```
+
+Cette configuration est essentielle pour que votre application se connecte correctement à la base de données PostgreSQL dans l'environnement Docker.
+
+### 3. Lancer les services avec Docker Compose
 
 ```bash
 docker-compose up --build
@@ -22,7 +32,7 @@ Cette commande va :
 - Démarrer la base de données PostgreSQL (port 5432)
 - Construire et démarrer le frontend React (port 80)
 
-### 3. Initialiser la base de données
+### 4. Initialiser la base de données
 
 Ouvrez un nouveau terminal et exécutez la commande suivante pour accéder au conteneur du backend :
 
@@ -36,7 +46,7 @@ Puis, à l'intérieur du conteneur, lancez les migrations Doctrine pour créer l
 php bin/console doctrine:migrations:migrate
 ```
 
-### 4. Importer les données de test
+### 5. Importer les données de test
 
 Toujours dans le conteneur backend, exécutez la commande suivante pour importer les clients et les achats à partir des fichiers CSV fournis :
 
@@ -46,12 +56,12 @@ php bin/console ugo:orders:import
 
 Un message de succès s'affichera si l'import s'est bien déroulé.
 
-### 5. Accéder à l'application
+### 6. Accéder à l'application
 
 - **Frontend** : [http://localhost](http://localhost)
 - **Backend (API)** : [http://localhost:8000/api](http://localhost:8000/api)
 
-### 6. Arrêter les services
+### 7. Arrêter les services
 
 Pour arrêter tous les services Docker :
 

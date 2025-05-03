@@ -39,11 +39,20 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/symfony
 
-# Copy project files
+# Copy composer files first for better layer caching
+COPY composer.json composer.lock symfony.lock ./
+
+# Set permissions early
+RUN mkdir -p var && chown -R www-data:www-data var
+
+# Install dependencies - verbose mode for better debugging
+RUN composer install --optimize-autoloader --no-scripts --no-interaction --verbose
+
+# Copy the rest of the project files
 COPY . .
 
-# Install dependencies
-RUN composer install --optimize-autoloader
+# Run composer scripts now that all files are available
+RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/symfony
